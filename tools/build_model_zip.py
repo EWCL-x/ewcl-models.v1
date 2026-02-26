@@ -5,12 +5,10 @@ Usage
 -----
     python tools/build_model_zip.py
 
-This script packages each model's weights and contract files into a
-self-contained zip archive under ``dist/``.
-
 Zip layout::
 
-    model/model.txt            (LightGBM text format for all three models)
+    model/model.txt   (LightGBM — EWCL-Disorder, EWCL-Structure)
+    model/model.pkl   (sklearn/joblib — EWCL-Sequence)
     contract/feature_list.json
     contract/inference_contract.json
     contract/schema_rules.json
@@ -32,8 +30,6 @@ MODELS_DIR = ROOT / "models"
 DIST_DIR = ROOT / "dist"
 VERSION = "1.0.0"
 
-# (model_name, subfolder_name)
-# All three models use LightGBM .txt format
 MODELS = [
     ("EWCL-Sequence", "ewcl-sequence"),
     ("EWCL-Disorder", "ewcl-disorder"),
@@ -51,30 +47,34 @@ def sha256_file(path: Path) -> str:
 
 def build_zip(model_name: str, subfolder: str) -> Path:
     model_dir = MODELS_DIR / subfolder
-    weight_path = model_dir / "model.txt"
 
-    if not weight_path.exists():
+    # Auto-detect weight file: prefer .pkl, fallback to .txt
+    pkl_path = model_dir / "model" / "model.pkl"
+    txt_path = model_dir / "model" / "model.txt"
+
+    if pkl_path.exists():
+        weight_path = pkl_path
+        weight_arc = "model/model.pkl"
+    elif txt_path.exists():
+        weight_path = txt_path
+        weight_arc = "model/model.txt"
+    else:
         raise FileNotFoundError(
-            f"Model weights not found: {weight_path}\n"
-            f"Expected: models/{subfolder}/model.txt"
+            f"No model weights found for {model_name}.\n"
+            f"Expected: {model_dir}/model/model.pkl  or  model.txt"
         )
 
     DIST_DIR.mkdir(parents=True, exist_ok=True)
     zip_name = f"{model_name}_v{VERSION}.zip"
     zip_path = DIST_DIR / zip_name
-
-    # Feature list (top-level models/ dir)
     feat_path = MODELS_DIR / f"{model_name}_feature_list.json"
 
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as z:
-        # Model weights — always model/model.txt (LightGBM)
-        z.write(weight_path, "model/model.txt")
+        z.write(weight_path, weight_arc)
 
-        # Feature list → contract/feature_list.json
         if feat_path.exists():
             z.write(feat_path, "contract/feature_list.json")
 
-        # Contract, calibration, provenance JSON files
         for sub in ["contract", "calibration", "provenance"]:
             sub_dir = model_dir / sub
             if sub_dir.exists():
@@ -82,19 +82,17 @@ def build_zip(model_name: str, subfolder: str) -> Path:
                     if f.is_file() and f.suffix == ".json":
                         z.write(f, f"{sub}/{f.name}")
 
-        # README
         readme_path = model_dir / "docs" / "README_MODEL.md"
         if readme_path.exists():
             z.write(readme_path, "docs/README_MODEL.md")
 
-    size_kb = zip_path.stat().st_size // 1024
-    print(f"  ✓ {zip_name}  ({size_kb:,} KB)")
+    size_mb = zip_path.stat().st_size / (1024 * 1024)
+    print(f"  ✓ {zip_name}  ({size_mb:.1f} MB)  [{weight_arc}]")
     return zip_path
 
 
 def main() -> None:
     print(f"Building model zips (v{VERSION})…\n")
-
     sha_lines: list[str] = []
     for model_name, subfolder in MODELS:
         try:
@@ -108,7 +106,6 @@ def main() -> None:
         sha_path = DIST_DIR / "SHA256SUMS.txt"
         sha_path.write_text("\n".join(sha_lines) + "\n")
         print(f"\n  ✓ SHA256SUMS.txt → {sha_path}")
-
     print("\nDone.")
 
 
