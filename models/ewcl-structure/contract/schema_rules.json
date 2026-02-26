@@ -1,0 +1,7 @@
+{
+  "allow_missing": true,
+  "fill_value": 50.0,
+  "require_numeric": true,
+  "allowed_meta_cols": ["protein_id", "residue_index", "aa"],
+  "notes": "allow_missing=true because structure features (plddt) may not be available when running from FASTA only. fill_value=50.0 is the default pLDDT when no structure is provided."
+}

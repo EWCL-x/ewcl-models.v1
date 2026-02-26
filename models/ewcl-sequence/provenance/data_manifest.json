@@ -1,0 +1,11 @@
+{
+  "training_data": "CAID-2 disorder ground truth (DisProt + MobiDB curated)",
+  "ground_truth_sources": [
+    "disorder_pdb",
+    "disorder_nox"
+  ],
+  "num_proteins_train": "see publication",
+  "num_residues_train": "see publication",
+  "cross_validation": "stratified 5-fold",
+  "feature_set": "all_df: 224 base sequence features + 20 AA one-hot + 4 PSSM-derived + 1 is_unknown_aa = 249 total"
+}

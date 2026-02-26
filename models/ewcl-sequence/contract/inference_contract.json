@@ -1,0 +1,17 @@
+{
+  "model_name": "EWCL-Sequence",
+  "model_version": "1.0.0",
+  "framework": "scikit-learn (LGBMClassifier wrapper)",
+  "framework_version": "lightgbm==4.6.0, scikit-learn==1.7.1",
+  "model_format": "pkl",
+  "task": "binary_classification",
+  "target": "disorder",
+  "input_type": "per_residue_features",
+  "num_features": 249,
+  "feature_source": "all_df (base_df + pssm_df)",
+  "prediction_method": "predict_proba",
+  "class_mapping": {"0": "ordered", "1": "disordered"},
+  "output_range": [0.0, 1.0],
+  "default_threshold": 0.5,
+  "notes": "Uses classes_ attribute to find disorder index. PSSM features are zero-filled when no PSSM is available."
+}

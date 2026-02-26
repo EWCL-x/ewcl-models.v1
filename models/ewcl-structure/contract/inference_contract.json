@@ -1,0 +1,25 @@
+{
+  "model_name": "EWCL-Structure",
+  "model_version": "1.0.0",
+  "framework": "LightGBM (Booster)",
+  "framework_version": "lightgbm==4.6.0",
+  "model_format": "txt",
+  "task": "binary_classification",
+  "target": "disorder",
+  "input_type": "per_residue_features",
+  "num_features": 230,
+  "feature_source": "base_df (224 base) + 6 structure features",
+  "prediction_method": "model.predict(X)",
+  "class_mapping": {"0": "ordered", "1": "disordered"},
+  "output_range": [0.0, 1.0],
+  "default_threshold": 0.5,
+  "structure_features": [
+    "plddt",
+    "struct_curvature",
+    "struct_hydropathy",
+    "struct_charge",
+    "struct_hydro_entropy",
+    "struct_charge_entropy"
+  ],
+  "notes": "When PDB/CIF is provided, pLDDT comes from structure b-factor. Otherwise pLDDT defaults to 50. The other 5 structure features are always sequence-derived."
+}

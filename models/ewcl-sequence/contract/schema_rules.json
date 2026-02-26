@@ -1,0 +1,6 @@
+{
+  "allow_missing": false,
+  "fill_value": null,
+  "require_numeric": true,
+  "allowed_meta_cols": ["protein_id", "residue_index", "aa"]
+}

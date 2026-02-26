@@ -1,0 +1,41 @@
+cff-version: 1.2.0
+title: >-
+  Entropy-Weighted Collapse Likelihood (EWCL): sequence- and
+  structure-conditioned predictors of intrinsic disorder and
+  collapse propensity
+message: >-
+  If you use these models, please cite this work.
+  Journal details and DOI are pending; a preprint/journal
+  submission is forthcoming.
+type: software
+version: 1.0.0
+date-released: "2026-01-01"
+license: MIT
+repository-code: "https://github.com/EWCL-x/EWCL-Models"
+keywords:
+  - protein disorder
+  - intrinsically disordered proteins
+  - collapse propensity
+  - entropy-weighted collapse likelihood
+  - LightGBM
+  - bioinformatics
+  - AlphaFold
+  - pLDDT
+authors:
+  - family-names: Cristino
+    given-names: Lucas
+  - family-names: Uversky
+    given-names: Vladimir N.
+preferred-citation:
+  type: unpublished
+  title: >-
+    Entropy-Weighted Collapse Likelihood (EWCL): sequence- and
+    structure-conditioned predictors of intrinsic disorder and
+    collapse propensity
+  authors:
+    - family-names: Cristino
+      given-names: Lucas
+    - family-names: Uversky
+      given-names: Vladimir N.
+  year: 2026
+  notes: "Manuscript in preparation (preprint/journal submission forthcoming)"

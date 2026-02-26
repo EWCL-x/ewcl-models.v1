@@ -1,0 +1,12 @@
+# Pinned versions matching the training / validation environment.
+# Reproducibility lock — use these exact versions to guarantee
+# bit-identical predictions against published benchmarks.
+#
+# Python 3.11.8  (CPython)
+# OS: Ubuntu 22.04 / macOS 14 (validated on both)
+#
+numpy==2.2.6
+pandas==2.3.0
+lightgbm==4.6.0
+scikit-learn==1.7.1
+joblib==1.5.1

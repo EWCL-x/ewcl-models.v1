@@ -1,0 +1,18 @@
+{
+  "model_name": "EWCL-Sequence",
+  "model_type": "LGBMClassifier (scikit-learn API)",
+  "boosting_type": "gbdt",
+  "objective": "binary",
+  "n_estimators": 5000,
+  "max_depth": 12,
+  "learning_rate": 0.01,
+  "num_leaves": 127,
+  "min_child_samples": 50,
+  "subsample": 0.85,
+  "colsample_bytree": 0.7,
+  "reg_alpha": 0.5,
+  "reg_lambda": 2.0,
+  "random_state": 42,
+  "classes_": [0, 1],
+  "notes": "Trained via sklearn LGBMClassifier; serialized as joblib .pkl"
+}

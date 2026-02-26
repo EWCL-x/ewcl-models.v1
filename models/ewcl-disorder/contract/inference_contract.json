@@ -1,0 +1,17 @@
+{
+  "model_name": "EWCL-Disorder",
+  "model_version": "1.0.0",
+  "framework": "LightGBM (Booster)",
+  "framework_version": "lightgbm==4.6.0",
+  "model_format": "txt",
+  "task": "binary_classification",
+  "target": "disorder",
+  "input_type": "per_residue_features",
+  "num_features": 239,
+  "feature_source": "base_df (224 base + 15 positional features)",
+  "prediction_method": "model.predict(X)",
+  "class_mapping": {"0": "ordered", "1": "disordered"},
+  "output_range": [0.0, 1.0],
+  "default_threshold": 0.5,
+  "notes": "LightGBM Booster with sigmoid objective. predict() returns probabilities directly."
+}

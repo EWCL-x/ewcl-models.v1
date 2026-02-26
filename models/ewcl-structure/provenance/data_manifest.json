@@ -1,0 +1,11 @@
+{
+  "training_data": "CAID-2 disorder ground truth + AlphaFold structures",
+  "ground_truth_sources": [
+    "disorder_pdb",
+    "disorder_nox"
+  ],
+  "num_proteins_train": "see publication",
+  "num_residues_train": "see publication",
+  "cross_validation": "stratified 5-fold",
+  "feature_set": "base_df: 224 base sequence features + 6 structure features (plddt, struct_curvature, struct_hydropathy, struct_charge, struct_hydro_entropy, struct_charge_entropy) = 230 total"
+}

@@ -1,0 +1,3 @@
+# Structure parsing (PDB/mmCIF) — optional
+gemmi>=0.6
+biopython>=1.82

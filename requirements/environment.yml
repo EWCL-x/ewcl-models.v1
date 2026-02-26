@@ -1,0 +1,25 @@
+# Conda environment for EWCL-Models
+# Create:  conda env create -f requirements/environment.yml
+# Update:  conda env update -f requirements/environment.yml --prune
+name: ewcl
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - numpy>=1.24
+  - pandas>=2.0
+  - lightgbm>=4.0
+  - scikit-learn>=1.3
+  - joblib>=1.3
+  # Optional — structure parsing
+  - gemmi>=0.6
+  - biopython>=1.82
+  # Optional — Parquet output
+  - pyarrow>=14.0
+  # Dev / testing
+  - pytest>=7.0
+  - pytest-cov
+  - pip
+  - pip:
+    - -e .

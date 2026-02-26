@@ -1,0 +1,70 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ewcl-models"
+dynamic = ["version"]
+description = "Frozen publication models for protein disorder and collapse propensity prediction."
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.9"
+authors = [
+    {name = "Lucas Cristino"},
+    {name = "Vladimir N. Uversky"},
+]
+keywords = [
+    "protein disorder",
+    "intrinsically disordered proteins",
+    "collapse propensity",
+    "LightGBM",
+    "bioinformatics",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+dependencies = [
+    "numpy>=1.24",
+    "pandas>=2.0",
+    "lightgbm>=4.0",
+    "scikit-learn>=1.3",
+    "joblib>=1.3",
+]
+
+[project.optional-dependencies]
+structure = [
+    "gemmi>=0.6",
+    "biopython>=1.82",
+]
+parquet = [
+    "pyarrow>=14.0",
+]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov",
+]
+all = [
+    "ewcl-models[structure,parquet,dev]",
+]
+
+[project.scripts]
+ewcl-predict = "ewcl_models.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/EWCL-x/EWCL-Models"
+Repository = "https://github.com/EWCL-x/EWCL-Models"
+
+[tool.setuptools.dynamic]
+version = {attr = "ewcl_models.version.__version__"}
+
+[tool.setuptools.packages.find]
+include = ["ewcl_models*"]

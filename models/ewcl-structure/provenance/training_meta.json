@@ -1,0 +1,9 @@
+{
+  "model_name": "EWCL-Structure",
+  "model_type": "LightGBM Booster",
+  "boosting_type": "gbdt",
+  "objective": "binary sigmoid:1",
+  "num_trees": 1000,
+  "num_class": 1,
+  "notes": "LightGBM Booster saved as model_str text format (.txt). Structure features include pLDDT from AlphaFold and 5 sequence-derived structural descriptors."
+}

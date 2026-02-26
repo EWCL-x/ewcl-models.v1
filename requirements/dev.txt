@@ -1,0 +1,6 @@
+# Development dependencies
+-r base.txt
+-r structure.txt
+pytest>=7.0
+pytest-cov
+pyarrow>=14.0
