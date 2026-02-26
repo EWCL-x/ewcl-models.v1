@@ -10,7 +10,7 @@ self-contained zip archive under ``dist/``.
 
 Zip layout::
 
-    model/model.txt            (or model/model.pkl)
+    model/model.txt            (LightGBM text format for all three models)
     contract/feature_list.json
     contract/inference_contract.json
     contract/schema_rules.json
@@ -24,7 +24,6 @@ Zip layout::
 from __future__ import annotations
 
 import hashlib
-import json
 import zipfile
 from pathlib import Path
 
@@ -33,23 +32,12 @@ MODELS_DIR = ROOT / "models"
 DIST_DIR = ROOT / "dist"
 VERSION = "1.0.0"
 
-# Each entry: (model_name, model_weight_filename, feature_list_json)
+# (model_name, subfolder_name)
+# All three models use LightGBM .txt format
 MODELS = [
-    (
-        "EWCL-Sequence",
-        "EWCL-Sequence.pkl",
-        "EWCL-Sequence_feature_list.json",
-    ),
-    (
-        "EWCL-Disorder",
-        "EWCL-Disorder.txt",
-        "EWCL-Disorder_feature_list.json",
-    ),
-    (
-        "EWCL-Structure",
-        "EWCL-Structure.txt",
-        "EWCL-Structure_feature_list.json",
-    ),
+    ("EWCL-Sequence", "ewcl-sequence"),
+    ("EWCL-Disorder", "ewcl-disorder"),
+    ("EWCL-Structure", "ewcl-structure"),
 ]
 
 
@@ -61,30 +49,32 @@ def sha256_file(path: Path) -> str:
     return h.hexdigest()
 
 
-def build_zip(name: str, weight_file: str, feat_list_file: str) -> Path:
-    model_dir = MODELS_DIR / name
-    weight_path = MODELS_DIR / weight_file
+def build_zip(model_name: str, subfolder: str) -> Path:
+    model_dir = MODELS_DIR / subfolder
+    weight_path = model_dir / "model.txt"
 
     if not weight_path.exists():
         raise FileNotFoundError(
             f"Model weights not found: {weight_path}\n"
-            f"Copy the trained model file to {MODELS_DIR}/"
+            f"Expected: models/{subfolder}/model.txt"
         )
 
     DIST_DIR.mkdir(parents=True, exist_ok=True)
-    zip_name = f"{name}_v{VERSION}.zip"
+    zip_name = f"{model_name}_v{VERSION}.zip"
     zip_path = DIST_DIR / zip_name
 
+    # Feature list (top-level models/ dir)
+    feat_path = MODELS_DIR / f"{model_name}_feature_list.json"
+
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as z:
-        # Model weights
-        ext = weight_path.suffix
-        z.write(weight_path, f"model/model{ext}")
+        # Model weights — always model/model.txt (LightGBM)
+        z.write(weight_path, "model/model.txt")
 
-        # Feature list
-        feat_path = MODELS_DIR / feat_list_file
-        z.write(feat_path, "contract/feature_list.json")
+        # Feature list → contract/feature_list.json
+        if feat_path.exists():
+            z.write(feat_path, "contract/feature_list.json")
 
-        # Contract files
+        # Contract, calibration, provenance JSON files
         for sub in ["contract", "calibration", "provenance"]:
             sub_dir = model_dir / sub
             if sub_dir.exists():
@@ -97,7 +87,8 @@ def build_zip(name: str, weight_file: str, feat_list_file: str) -> Path:
         if readme_path.exists():
             z.write(readme_path, "docs/README_MODEL.md")
 
-    print(f"  ✓ {zip_name}  ({zip_path.stat().st_size:,} bytes)")
+    size_kb = zip_path.stat().st_size // 1024
+    print(f"  ✓ {zip_name}  ({size_kb:,} KB)")
     return zip_path
 
 
@@ -105,19 +96,18 @@ def main() -> None:
     print(f"Building model zips (v{VERSION})…\n")
 
     sha_lines: list[str] = []
-    for name, weight, feats in MODELS:
+    for model_name, subfolder in MODELS:
         try:
-            zp = build_zip(name, weight, feats)
+            zp = build_zip(model_name, subfolder)
             sha = sha256_file(zp)
             sha_lines.append(f"{sha}  {zp.name}")
         except FileNotFoundError as e:
-            print(f"  ✗ {name}: {e}")
+            print(f"  ✗ {model_name}: {e}")
 
-    # Write SHA256SUMS
     if sha_lines:
         sha_path = DIST_DIR / "SHA256SUMS.txt"
         sha_path.write_text("\n".join(sha_lines) + "\n")
-        print(f"\n  ✓ SHA256SUMS.txt written to {sha_path}")
+        print(f"\n  ✓ SHA256SUMS.txt → {sha_path}")
 
     print("\nDone.")
 
