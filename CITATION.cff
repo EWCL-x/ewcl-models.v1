@@ -1,8 +1,7 @@
 cff-version: 1.2.0
 title: >-
-  Entropy-Weighted Collapse Likelihood (EWCL): sequence- and
-  structure-conditioned predictors of intrinsic disorder and
-  collapse propensity
+  Entropy-Weighted Comformational Likelihood (EWCL): An interpretable sequence-based framework for disorder
+propensity and confidence–disorder conflict analysis
 message: >-
   If you use these models, please cite this work.
   Journal details and DOI are pending; a preprint/journal
