@@ -1,0 +1,21 @@
+{
+  "schema": "ewcl.feature_contract.v1",
+  "source": "local_models_in_repo",
+  "files": {
+    "EWCL-Sequence": {
+      "path": "contracts/features/EWCL-Sequence.feature_list.csv",
+      "n_features": 249,
+      "sha256": "38aec1de86a4751f6d82a233a279c5cf69c32193f5482a61b8dac8344e37ab01"
+    },
+    "EWCL-Disorder": {
+      "path": "contracts/features/EWCL-Disorder.feature_list.csv",
+      "n_features": 239,
+      "sha256": "fa646157e1c7462e09fdd261cf1b93e880b3487f6d7578710cb8d55de6d65621"
+    },
+    "EWCL-Structure": {
+      "path": "contracts/features/EWCL-Structure.feature_list.csv",
+      "n_features": 230,
+      "sha256": "8e699b81b62494c2c11849b0a520eb75fffa97b6fa0138092e92c1dc8afaf3ea"
+    }
+  }
+}
